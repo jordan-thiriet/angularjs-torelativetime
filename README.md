@@ -14,6 +14,13 @@ fr_FR (French)
 it_IT (Italian)
 de_DE (German)
 
+toRelativeTime currently supports the following date format:
+
+YYYY-mm-dd hh:ii:ss
+YYYY-mm-dd
+dd/mm/YYYY hh:ii:ss
+dd/mm/YYYY
+
 If you know a language not listed here, please consider submitting a translation. Localization codes by language.
 
 Use

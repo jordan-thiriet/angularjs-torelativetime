@@ -9,8 +9,25 @@ angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
     return function (date,iso_code) {
         var labels = i18n(iso_code);    // Get labels
         var split = date.split(' ');    // Split datetime => array[0]: date, array[1]: time
-        var date = split[0].split('-'); // Split date to year: array[0], month: array[1], day: array[2]
-        var time = split[1].split(':'); // Split time to hour: array[0], minutes: array[1], seconds: array[2]
+
+        /*check date format*/
+        if (/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/.test(split[0]))
+        {
+            date = split[0].split('-');         // Split date to year: array[0], month: array[1], day: array[2]
+        } else {
+            date = split[0].split('/');         // Split date to year: array[2], month: array[1], day: array[0]
+            date = [date[2],date[1],date[0]];   // Put date to year: array[0], month: array[1], day: array[2]
+        }
+        /*Check if time defined*/
+        if(split[1] !== undefined) {
+            var time = split[1].split(':'); // Split time to hour: array[0], minutes: array[1], seconds: array[2]
+            /*If time is not defined*/
+            if(time.length < 3) {
+                time = [0,0,0];
+            }
+        } else {
+            time = [0,0,0];
+        }
 
         /*Define datetime for calculate diff*/
         var date1 = new Date(date[0],date[1]-1 ,date[2],time[0],time[1],time[2]);
@@ -20,76 +37,26 @@ angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
         /*Calculate diff between two date*/
         var tmp = date2 - date1;
 
+        var mins = ((tmp/1000)/60);
 
-        /*Extract seconds diff*/
-        tmp = Math.floor(tmp/1000);
-        var sec = tmp % 60;
+        var text = '';
 
-        /*Extract minutes diff*/
-        tmp = Math.floor((tmp-sec)/60);
-        var min = tmp % 60;
+        /*Put i18n text*/
+        if(mins < 1) text = labels.seconde_ago;
+        else if(mins < 2) text = labels.minute_ago;
+        else if(mins < 60) text = labelsToValue(labels.minutes_ago, mins);
+        else if(mins < 120) text = labels.hour_ago;
+        else if(mins < 1440) text = labelsToValue(labels.hours_ago,mins/60);
+        else if(mins < 2880) text = labels.yesterday;
+        else if(mins < 10080) text = labelsToValue(labels.days_ago,mins/1440);
+        else if(mins < 20160) text = labels.week_ago;
+        else if(mins < 43829.0639) text = labelsToValue(labels.weeks_ago,mins/10080);
+        else if(mins < 87658.1278) text = labels.month_ago;
+        else if(mins < 525948.766) text = labelsToValue(labels.months_ago,mins/43829.0639);
+        else if(mins < 1051897.532) text = labels.year_ago;
+        else if(mins >= 1051897.532) text = labelsToValue(labels.years_ago,mins/525948.766);
 
-        /*Extract hours diff*/
-        tmp = Math.floor((tmp-min)/60);
-        var hour = tmp % 24;
-
-        /*Extract days diff*/
-        tmp = Math.floor((tmp-hour)/24);
-        var day = tmp;
-
-
-        var value = '';
-
-        /*Less than a day*/
-        if(day === 0) {
-            if(hour === 1) {
-                value = labels.hour_ago;
-            } else if(hour > 1) {
-                value = labelsToValue(labels.hours_ago,hour);
-            } else if(min === 1) {
-                value = labels.minute_ago;
-            } else if(min > 1) {
-                value = labelsToValue(labels.minutes_ago,min);
-            } else {
-                value = labels.seconde_ago;
-            }
-        }
-        /*Yesterday*/
-        else if(day === 1) {
-            value = labels.yesterday;
-        }
-        /*Less than a week and up to 2 days*/
-        else if(day < 7) {
-            value = labelsToValue(labels.days_ago,day);
-        }
-        /*Less than a month*/
-        else if(day < 30) {
-            var week = Math.floor(day/7);
-            if(week === 1) {
-                value = labels.week_ago;
-            } else {
-                value = labelsToValue(labels.weeks_ago, week);
-            }
-        }
-        /*Up to 1 month and less than 1 year*/
-        else if(day >= 30 && day < 365) {
-            var month = Math.floor(day/30);
-            if(month === 1) {
-                value = labels.month_ago;
-            } else {
-                value = labelsToValue(labels.months_ago, Math.floor(day/30));
-            }
-        }
-        /*1 year and up to 1 year*/
-        else {
-            var year = Math.floor(day/365);
-            if(year === 1) {
-                value = labels.year_ago;
-            } else {
-                value = labelsToValue(labels.years_ago, year);
-            }
-        }
-        return value;
+        return text;
     };
 
     /**
@@ -226,10 +193,10 @@ angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
                 labels = labels_it;
                 break;
             case 'de_DE':
-                labels = labels_it;
+                labels = labels_de;
                 break;
             default :
-                labels = labels_de;
+                labels = labels_en;
         }
 
         return labels;
@@ -244,6 +211,6 @@ angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
      * @returns {*}
      */
     function labelsToValue(labels, value) {
-        return labels.replace('%d',value);
+        return labels.replace('%d',Math.floor(value));
     }
 });
