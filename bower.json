@@ -1,0 +1,25 @@
+{
+  "name": "angularjs-torelativetime",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jordan-thiriet/angularjs-torelativetime",
+  "description": "This is an angularjs filter for date. It gives NSDate the ability to report times like \"A moment ago\", \"30 seconds ago\", \"5 minutes ago\", \"Yesterday\", \"Last month\", \"2 years ago\", and so on.",
+  "main": "toRelativeTime.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angularjs",
+    "relative",
+    "time",
+    "date",
+    "filters",
+    "ng",
+    "time",
+    "ago"
+  ],
+  "authors": [
+    "thiriet jordan"
+  ],
+  "license": "MIT",
+  "private": true
+}
