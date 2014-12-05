@@ -32,6 +32,11 @@ Add the files to your project
     <script src='lib/toRelativeTime.min.js'></script>
 ```
 
+Or use bower
+```shell
+    bower install angular-torelativetime
+```
+
 Add RelativeTime to your angular app config
 
 ```javascript
