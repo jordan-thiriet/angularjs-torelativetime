@@ -1,6 +1,11 @@
 'use strict';
 
-angular.module('toDateAgo', []).filter('toDateAgo', function () {
+/**
+ * This is an angularjs filter for date.
+ * It gives NSDate the ability to report times like "A moment ago", "30 seconds ago", "5 minutes ago", "Yesterday", "Last month", "2 years ago", and so on.
+ */
+
+angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
     return function (date,iso_code) {
         var labels = i18n(iso_code);    // Get labels
         var split = date.split(' ');    // Split datetime => array[0]: date, array[1]: time
@@ -104,7 +109,7 @@ angular.module('toDateAgo', []).filter('toDateAgo', function () {
             hours_ago: 'il y a %d heures',
             minute_ago: 'il y a 1 minute',
             minutes_ago: 'il y a %d minutes',
-            seconde_ago: 'il y a moins d\'une minute',
+            seconde_ago: 'a l\'instant',
             days_ago: 'il y a %d jours',
             week_ago: 'il y a 1 semaine',
             weeks_ago: 'il y a %d semaines',
@@ -121,7 +126,7 @@ angular.module('toDateAgo', []).filter('toDateAgo', function () {
             hours_ago: '%d hours ago',
             minute_ago: '1 minute ago',
             minutes_ago: '%d minutes ago',
-            seconde_ago: 'less than a minute',
+            seconde_ago: 'just now',
             days_ago: '%d days ago',
             week_ago: '1 week ago',
             weeks_ago: '%d weeks ago',
@@ -129,6 +134,74 @@ angular.module('toDateAgo', []).filter('toDateAgo', function () {
             months_ago: '%d months ago',
             year_ago: '1 year ago',
             years_ago: '%d years ago'
+        };
+
+        /*Portuguese*/
+        var labels_pt = {
+            yesterday: 'ontem',
+            hour_ago: '1 hora atrás',
+            hours_ago: '%d horas atrás',
+            minute_ago: '1 minute atrás',
+            minutes_ago: '%d minutos atrás',
+            seconde_ago: 'agora mesmo',
+            days_ago: '%d dias atrás',
+            week_ago: '1 semana atrás',
+            weeks_ago: '%d semanas atrás',
+            month_ago: '1 mês atrás',
+            months_ago: '%d meses atrás',
+            year_ago: '1 ano passado',
+            years_ago: '%d anos atrás'
+        };
+
+        /*Italian*/
+        var labels_it = {
+            yesterday: 'ieri',
+            hour_ago: '1 ora fa',
+            hours_ago: '%d ore fa',
+            minute_ago: '1 minuto fa',
+            minutes_ago: '%d minuti fa',
+            seconde_ago: 'ora',
+            days_ago: '%d giorni fa',
+            week_ago: '1 settimana fa',
+            weeks_ago: '%d settimane fa',
+            month_ago: '1 mese fa',
+            months_ago: '%d mesi fa',
+            year_ago: '1 anno fa',
+            years_ago: '%d anni fa'
+        };
+
+        /*Espagnol*/
+        var labels_es = {
+            yesterday: 'ayer',
+            hour_ago: 'hace 1 hora',
+            hours_ago: 'hace %d horas',
+            minute_ago: 'hace 1 minuto',
+            minutes_ago: 'hace %d minutos',
+            seconde_ago: 'ahora mismo',
+            days_ago: 'hace %d días',
+            week_ago: 'hace 1 semana',
+            weeks_ago: 'hace %d semanas',
+            month_ago: 'hace 1 mes',
+            months_ago: 'hace %d meses',
+            year_ago: 'hace 1 día',
+            years_ago: 'hace %d años'
+        };
+
+        /*Deutch*/
+        var labels_de = {
+            yesterday: 'Gestern',
+            hour_ago: 'Vor 1 Stunde',
+            hours_ago: 'Vor %d Stunden',
+            minute_ago: 'Vor 1 Minute',
+            minutes_ago: 'Vor %d Minuten',
+            seconde_ago: 'Gerade eben',
+            days_ago: 'Vor %d Tagen',
+            week_ago: 'Vor 1 Woche',
+            weeks_ago: 'Vor %d Wochen',
+            month_ago: 'Vor 1 Monat',
+            months_ago: 'Vor %d Monaten',
+            year_ago: 'Vor 1 Jahr',
+            years_ago: 'Vor %d Jahren'
         };
 
         /*End translate*/
@@ -143,8 +216,20 @@ angular.module('toDateAgo', []).filter('toDateAgo', function () {
             case 'en_EN':
                 labels = labels_en;
                 break;
+            case 'pt_PT':
+                labels = labels_pt;
+                break;
+            case 'es_ES':
+                labels = labels_es;
+                break;
+            case 'it_IT':
+                labels = labels_it;
+                break;
+            case 'de_DE':
+                labels = labels_it;
+                break;
             default :
-                labels = labels_en;
+                labels = labels_de;
         }
 
         return labels;
