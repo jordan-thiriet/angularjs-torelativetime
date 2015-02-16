@@ -7,38 +7,16 @@
 
 angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
     return function (date,iso_code) {
+        if (typeof date === 'undefined') {
+            return '';
+        }
         var labels = i18n(iso_code);    // Get labels
-        var split = date.split(' ');    // Split datetime => array[0]: date, array[1]: time
-
-        /*check date format*/
-        if (/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/.test(split[0]))
-        {
-            date = split[0].split('-');         // Split date to year: array[0], month: array[1], day: array[2]
-        } else {
-            date = split[0].split('/');         // Split date to year: array[2], month: array[1], day: array[0]
-            date = [date[2],date[1],date[0]];   // Put date to year: array[0], month: array[1], day: array[2]
-        }
-        /*Check if time defined*/
-        if(split[1] !== undefined) {
-            var time = split[1].split(':'); // Split time to hour: array[0], minutes: array[1], seconds: array[2]
-            /*If time is not defined*/
-            if(time.length < 3) {
-                time = [0,0,0];
-            }
-        } else {
-            time = [0,0,0];
-        }
-
         /*Define datetime for calculate diff*/
-        var date1 = new Date(date[0],date[1]-1 ,date[2],time[0],time[1],time[2]);
-
+        var date1 = new Date(date);
         var date2 = new Date(); //Now
-
         /*Calculate diff between two date*/
         var tmp = date2 - date1;
-
         var mins = ((tmp/1000)/60);
-
         var text = '';
 
         /*Put i18n text*/
@@ -76,7 +54,7 @@ angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
             hours_ago: 'il y a %d heures',
             minute_ago: 'il y a 1 minute',
             minutes_ago: 'il y a %d minutes',
-            seconde_ago: 'a l\'instant',
+            seconde_ago: 'Ã  l\'instant',
             days_ago: 'il y a %d jours',
             week_ago: 'il y a 1 semaine',
             weeks_ago: 'il y a %d semaines',
@@ -106,18 +84,18 @@ angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
         /*Portuguese*/
         var labels_pt = {
             yesterday: 'ontem',
-            hour_ago: '1 hora atrás',
-            hours_ago: '%d horas atrás',
-            minute_ago: '1 minute atrás',
-            minutes_ago: '%d minutos atrás',
+            hour_ago: '1 hora atrÃ¡s',
+            hours_ago: '%d horas atrÃ¡s',
+            minute_ago: '1 minute atrÃ¡s',
+            minutes_ago: '%d minutos atrÃ¡s',
             seconde_ago: 'agora mesmo',
-            days_ago: '%d dias atrás',
-            week_ago: '1 semana atrás',
-            weeks_ago: '%d semanas atrás',
-            month_ago: '1 mês atrás',
-            months_ago: '%d meses atrás',
+            days_ago: '%d dias atrÃ¡s',
+            week_ago: '1 semana atrÃ¡s',
+            weeks_ago: '%d semanas atrÃ¡s',
+            month_ago: '1 mÃªs atrÃ¡s',
+            months_ago: '%d meses atrÃ¡s',
             year_ago: '1 ano passado',
-            years_ago: '%d anos atrás'
+            years_ago: '%d anos atrÃ¡s'
         };
 
         /*Italian*/
@@ -145,13 +123,13 @@ angular.module('toRelativeTime', []).filter('toRelativeTime', function () {
             minute_ago: 'hace 1 minuto',
             minutes_ago: 'hace %d minutos',
             seconde_ago: 'ahora mismo',
-            days_ago: 'hace %d días',
+            days_ago: 'hace %d dÃ­as',
             week_ago: 'hace 1 semana',
             weeks_ago: 'hace %d semanas',
             month_ago: 'hace 1 mes',
             months_ago: 'hace %d meses',
-            year_ago: 'hace 1 día',
-            years_ago: 'hace %d años'
+            year_ago: 'hace 1 dÃ­a',
+            years_ago: 'hace %d aÃ±os'
         };
 
         /*Deutch*/
